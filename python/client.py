@@ -4,17 +4,62 @@ import sys
 import json
 import socket
 
-def count_line(board, line):
-  switch line:
+# line = direction of line - 8 directions
+def count_line(board, player, square, line):
+  direction = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+  count = 0
+  end = False
+  row = square[0]
+  col = square[1]
+  target = 2 if player == 1 else 1
+  while not end:
+    row += direction[line][0]
+    col += direction[line][1]
+    if row < 0 or row > 7 or col < 0 or col > 7:
+      count = 0
+      end = True
+    elif board[row][col] == target:
+      count += 1
+    else:
+      if board[row][col] == 0:
+        count = 0
+      end = True
+    
+  return count
+    
     
 
-def count_total(board, player):
+def count_total(board, player, square):
+  total = 0
+  for i in range(8):
+    total += count_line(board, player, square, i)
+    
+  return total
+
+def is_corner(square):
+  if square[0] == 0 or square[0] == 7:
+    if square[1] == 0 or square[1] == 7:
+      return True
+
+  return False
   
 
 def get_move(player, board):
-  # TODO determine valid moves
-  # TODO determine best move
-  return [2, 3]
+  best_move = None
+  best_score = 0
+  for row in range(len(board)):
+    for col in range(len(board[row])):
+      if board[row][col] == 0:
+        square = [row, col]
+        # if square is corner, always take it
+        score = count_total(board, player, square)
+        if score > 0 and is_corner(square):
+          return square
+        if score > best_score:
+          best_score = score
+          best_move = [row, col]
+
+  return best_move
 
 def prepare_response(move):
   response = '{}\n'.format(move).encode()
