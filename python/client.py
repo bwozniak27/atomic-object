@@ -12,6 +12,9 @@ def count_line(board, player, square, line):
   row = square[0]
   col = square[1]
   target = 2 if player == 1 else 1
+  
+  # loop through direction until player's piece is found to count num of pieces in line
+  # if empty square of end of board is found then line is invalid
   while not end:
     row += direction[line][0]
     col += direction[line][1]
@@ -26,9 +29,8 @@ def count_line(board, player, square, line):
       end = True
     
   return count
-    
-    
 
+# returns the total number of pieces that the player can flip by counting each direction
 def count_total(board, player, square):
   total = 0
   for i in range(8):
@@ -36,10 +38,10 @@ def count_total(board, player, square):
     
   return total
 
+# returns if square is a corner square
 def is_corner(square):
-  if square[0] == 0 or square[0] == 7:
-    if square[1] == 0 or square[1] == 7:
-      return True
+  if (square[0] == 0 or square[0] == 7) and (square[1] == 0 or square[1] == 7):
+    return True
 
   return False
   
@@ -51,7 +53,7 @@ def get_move(player, board):
     for col in range(len(board[row])):
       if board[row][col] == 0:
         square = [row, col]
-        # if square is corner, always take it
+        # corners win championships
         score = count_total(board, player, square)
         if score > 0 and is_corner(square):
           return square

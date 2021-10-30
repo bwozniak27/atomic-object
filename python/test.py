@@ -3,8 +3,55 @@ import client
 
 class TestGetMove(unittest.TestCase):
   def test_get_move_returns_a_valid_move(self):
-    board = [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 1, 1, 0, 0, 0], [0, 0, 0, 2, 1, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]]
-    self.assertEqual(client.get_move(1, board), [2, 3])
+    board = [[0, 0, 0, 0, 0, 0, 0, 0], 
+             [0, 0, 0, 0, 0, 0, 0, 0], 
+             [0, 0, 0, 0, 1, 0, 0, 0], 
+             [0, 0, 0, 1, 1, 0, 0, 0], 
+             [0, 0, 0, 2, 1, 0, 0, 0], 
+             [0, 0, 0, 0, 0, 0, 0, 0], 
+             [0, 0, 0, 0, 0, 0, 0, 0], 
+             [0, 0, 0, 0, 0, 0, 0, 0]]
+    self.assertEqual(client.get_move(2, board), [2, 3])
+    board = [[0, 0, 0, 0, 0, 0, 0, 0], 
+             [0, 0, 0, 0, 0, 0, 0, 0], 
+             [0, 0, 0, 0, 1, 0, 2, 0], 
+             [0, 0, 0, 1, 1, 0, 2, 0], 
+             [0, 2, 1, 0, 0, 0, 1, 0], 
+             [0, 0, 2, 2, 0, 0, 0, 0], 
+             [2, 2, 1, 0, 0, 0, 0, 0], 
+             [0, 2, 0, 0, 0, 0, 0, 0]]
+    self.assertEqual(client.get_move(1, board), [1, 6])
+    
+  def test_get_move_chooses_corner(self):
+    board = [[0, 0, 0, 0, 0, 0, 0, 0], 
+             [0, 0, 2, 0, 0, 0, 0, 0], 
+             [0, 0, 2, 0, 1, 0, 0, 0], 
+             [0, 0, 2, 0, 0, 0, 0, 0], 
+             [0, 0, 2, 0, 1, 0, 0, 0], 
+             [0, 0, 1, 0, 0, 0, 0, 0], 
+             [0, 2, 0, 0, 0, 0, 0, 0], 
+             [0, 0, 0, 0, 0, 0, 0, 0]]
+    self.assertEqual(client.get_move(1, board), [7, 0])
+    board = [[0, 0, 0, 0, 0, 0, 0, 0], 
+             [0, 0, 2, 0, 0, 0, 0, 0], 
+             [0, 0, 2, 0, 1, 0, 0, 0], 
+             [0, 0, 2, 0, 0, 0, 0, 0], 
+             [0, 0, 2, 0, 1, 0, 0, 0], 
+             [0, 0, 1, 0, 0, 0, 0, 0], 
+             [0, 1, 0, 0, 0, 0, 0, 0], 
+             [0, 2, 2, 1, 0, 0, 0, 0]]
+    self.assertEqual(client.get_move(1, board), [7, 0])
+    
+  def test_get_move_chooses_most_pieces(self):
+    board = [[0, 0, 0, 0, 0, 0, 0, 0], 
+             [0, 1, 2, 0, 0, 0, 0, 0], 
+             [0, 0, 2, 0, 0, 0, 0, 0], 
+             [0, 1, 2, 0, 0, 0, 0, 0], 
+             [0, 0, 2, 0, 0, 0, 0, 0], 
+             [0, 1, 0, 0, 0, 0, 0, 0], 
+             [0, 0, 0, 1, 2, 2, 0, 0], 
+             [0, 0, 0, 0, 0, 0, 0, 0]]
+    self.assertEqual(client.get_move(1, board), [3, 3])
 
 class TestPrepareResponse(unittest.TestCase):
   def test_prepare_response_returns_a_valid_response(self):
