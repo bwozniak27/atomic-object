@@ -14,18 +14,27 @@ def count_line(board, player, square, line):
   target = 2 if player == 1 else 1
   
   # loop through direction until player's piece is found to count num of pieces in line
-  # if empty square of end of board is found then line is invalid
+  # if empty square or end of board is found then line is invalid
   while not end:
+    
     row += direction[line][0]
     col += direction[line][1]
+    
+    # edge
     if row < 0 or row > 7 or col < 0 or col > 7:
       count = 0
       end = True
+      
+    # opponent piece
     elif board[row][col] == target:
       count += 1
+    
     else:
+      
+      # is not sandwhich so line is invalid
       if board[row][col] == 0:
         count = 0
+        
       end = True
     
   return count
@@ -44,7 +53,7 @@ def is_corner(square):
     return True
 
   return False
-  
+
 
 def get_move(player, board):
   best_move = None
@@ -53,6 +62,7 @@ def get_move(player, board):
     for col in range(len(board[row])):
       if board[row][col] == 0:
         square = [row, col]
+        
         # corners win championships
         score = count_total(board, player, square)
         if score > 0 and is_corner(square):
