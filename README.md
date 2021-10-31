@@ -78,6 +78,19 @@ Be sure to terminate your response with the newline, otherwise your move will ti
 
 Returning an invalid move will forfeit the game. Timing out (the default timeout is 15 seconds) will also forfeit the game.
 
+## Thought Process
+
+I began by simply implementing a brute-force greedy solution that chose the move that captured the most pieces for each move. 
+I wrote a few simple tests to ensure that it was doing what I intended. I then began to run the full game. 
+After running this solution several times, I found it to be very successful against the "random" player. Wanting to do better,
+though, I watched the games in the UI and tried to learn some strategy. I found that the corners were dominant positions because they
+could not be captured, so I added a hueristic to my player to always take the corner if it's available. I realized the only
+way the opponent could get to the corner is if my player plays in the squares adjacent to it, what I call the "danger zone", so I 
+only allow my player to play there if no other move exists.
+
+If I had more time, I would try to get my AI to look ahead moves instead of a simple greedy strategy. A basic implementation
+of this would be to avoid moves that give the opponent a bigger score on the next move.
+
 ## License
 
 Copyright © 2018

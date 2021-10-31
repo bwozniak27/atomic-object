@@ -12,66 +12,71 @@ def count_line(board, player, square, line):
   row = square[0]
   col = square[1]
   target = 2 if player == 1 else 1
-  
   # loop through direction until player's piece is found to count num of pieces in line
   # if empty square or end of board is found then line is invalid
   while not end:
-    
     row += direction[line][0]
     col += direction[line][1]
-    
     # edge
     if row < 0 or row > 7 or col < 0 or col > 7:
       count = 0
       end = True
-      
     # opponent piece
     elif board[row][col] == target:
       count += 1
-    
     else:
-      
       # is not sandwhich so line is invalid
       if board[row][col] == 0:
         count = 0
-        
       end = True
-    
   return count
 
 # returns the total number of pieces that the player can flip by counting each direction
 def count_total(board, player, square):
   total = 0
   for i in range(8):
-    total += count_line(board, player, square, i)
-    
+    total += count_line(board, player, square, i) 
   return total
 
 # returns if square is a corner square
 def is_corner(square):
-  if (square[0] == 0 or square[0] == 7) and (square[1] == 0 or square[1] == 7):
+  if square[0] in [0,7] and square[1] in [0,7]:
     return True
+  return False
 
+def is_danger_zone(square):
+  if square[0] in [0, 7] and square[1] in [1, 6]:
+    return True
+  if square[0] in [1, 6] and square[1] in [0, 1, 6, 7]:
+    return True
   return False
 
 
 def get_move(player, board):
   best_move = None
   best_score = 0
+  danger_move = None
   for row in range(len(board)):
     for col in range(len(board[row])):
+      # playable square
       if board[row][col] == 0:
         square = [row, col]
-        
-        # corners win championships
+        # available pieces to capture with move
         score = count_total(board, player, square)
-        if score > 0 and is_corner(square):
-          return square
+        # valid move
+        if score > 0:
+          # corners win championships
+          if is_corner(square):
+            return square
+          # dont let opponent get corner
+          elif is_danger_zone(square):
+            danger_move = square
+            continue # skip move if another move exists
         if score > best_score:
           best_score = score
-          best_move = [row, col]
-
-  return best_move
+          best_move = square
+  # only used danger move if no other move exists
+  return best_move if best_move else danger_move
 
 def prepare_response(move):
   response = '{}\n'.format(move).encode()
